@@ -58,7 +58,22 @@ app.post('/pokemon/insert', jsonParser, (req, res) => {
             name:name
         })
     //on code ensuite l'insertion dans mongoDB, lisez la doc hehe !!
-    res.json("A bien étais ajouté");
+    res.json("A bien été ajouté");
+
+});
+
+app.post('/pokemon/delete', jsonParser, (req, res) => {
+    const body = req.body;
+    const dbConnect = dbo.getDb();
+    console.log('Got body:', body);
+    var name = body.name
+    dbConnect
+        .collection("pokemonName")
+        .deleteOne({
+            name:name
+        })
+    //on code ensuite l'insertion dans mongoDB, lisez la doc hehe !!
+    res.json("A bien été supprimer");
 
 });
 
@@ -67,5 +82,7 @@ app.listen(port, function () {
 });
 
 /*
+supprimer node_modules et le reinstaller
+npm i
 node index.js
 */
