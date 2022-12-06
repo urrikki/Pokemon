@@ -47,32 +47,51 @@ app.get("/pokemon/list", function (req, res) {
     */
 })
 
-app.post('/pokemon/delete', jsonParser, (req, res) => {
-  const body = req.body;
-  const dbConnect = dbo.getDb();
-  console.log('Got body:', body);
-  dbConnect
-      .collection("pokemonName")
-      .deleteOne({
-          ...body
-      })
-      .then (function(result,err){
-        if (err) {
-          res.status(400).send(err.message);
-        } else {
-          res.json(result);
+
+app.post('/pokemon/update', jsonParser, (req, res) =>{
+    const body = req.body;
+    const dbConnect = dbo.getDb();
+    dbConnect
+    .collection("pokemonName")
+    .updateOne({
+        id : body.previd,
+        name: body.prevname,
+        type: body.prevtype
+    },{
+        $set:{ 
+          id : body.newid,
+          name: body.newname,
+          type: body.newtype
         }
-      })
-  //on code ensuite l'insertion dans mongoDB, lisez la doc hehe !!
+    })
+    .then (function(result,err){
+      if (err) {
+        res.status(400).send(err.message);
+      } else {
+        res.json(result);
+      }
+    })
+//on code ensuite l'insertion dans mongoDB, lisez la doc hehe !!
 });
 
-app.post('/pokemon/delete', jsonParser, (req, res) => {
+app.post('/pokemon/delete', jsonParser, (req, res) =>{
+  const body = req.body;
+  const dbConnect = dbo.getDb();
+  dbConnect
+  .collection("pokemonName")
+  .deleteOne({
+      name: body.name
+  })
+//on code ensuite l'insertion dans mongoDB, lisez la doc hehe !!
+});
+
+app.post('/pokemon/insert', jsonParser, (req, res) => {
     const body = req.body;
     const dbConnect = dbo.getDb();
     console.log('Got body:', body);
     dbConnect
         .collection("pokemonName")
-        .deleteOne({
+        .insertOne({
             ...body
         })
         .then (function(result,err){
