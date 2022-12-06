@@ -80,7 +80,7 @@ app.post('/pokemon/delete', jsonParser, (req, res) =>{
   dbConnect
   .collection("pokemonName")
   .deleteOne({
-      name: body.name
+      ...body
   })
 //on code ensuite l'insertion dans mongoDB, lisez la doc hehe !!
 });
@@ -102,6 +102,25 @@ app.post('/pokemon/insert', jsonParser, (req, res) => {
           }
         })
     //on code ensuite l'insertion dans mongoDB, lisez la doc hehe !!
+});
+
+app.post('/pokemon/insertDex', jsonParser, (req, res) => {
+  const body = req.body;
+  const dbConnect = dbo.getDb();
+  console.log('Got body:', body);
+  dbConnect
+      .collection("pokedex")
+      .insertOne({
+          ...body
+      })
+      .then (function(result,err){
+        if (err) {
+          res.status(400).send(err.message);
+        } else {
+          res.json(result);
+        }
+      })
+  //on code ensuite l'insertion dans mongoDB, lisez la doc hehe !!
 });
 
 app.listen(port, function () {
